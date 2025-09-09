@@ -694,25 +694,25 @@ img {
 }
 
 .cta-title {
-    font-size: clamp(2.2rem, 5vw, 3rem); /* Fonte responsiva */
+    font-size: clamp(2.2rem, 5vw, 3rem); 
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
 .cta-description {
-    font-size: clamp(1rem, 2.5vw, 1.25rem); /* Fonte responsiva */
+    font-size: clamp(1rem, 2.5vw, 1.25rem); 
     opacity: 0.9;
-    max-width: 600px; /* Limita a largura para melhor leitura */
-    margin: 0 auto 2.5rem auto; /* Centraliza e adiciona margem inferior */
+    max-width: 600px; 
+    margin: 0 auto 2.5rem auto; 
 }
 
 .cta-buttons {
     display: flex;
-    justify-content: center; /* Centraliza os botões */
+    justify-content: center;
     align-items: center;
-    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
-    gap: 1.5rem; /* Espaçamento entre os botões */
-    margin-bottom: 5rem; /* Espaço entre os botões e as features */
+    flex-wrap: wrap; 
+    gap: 1.5rem; 
+    margin-bottom: 5rem; 
 }
 
 /* Estilo base para os botões */
@@ -720,7 +720,7 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem; /* Espaço entre o ícone e o texto */
+    gap: 0.75rem; 
     padding: 0.8rem 1.75rem;
     font-size: 1rem;
     font-weight: 600;
@@ -734,7 +734,7 @@ img {
 /* Botão branco sólido */
 .btn-white {
     background-color: #ffffff;
-    color: #6e5cf6; /* Cor do início do gradiente */
+    color: #6e5cf6; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 

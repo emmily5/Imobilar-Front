@@ -1,6 +1,4 @@
 // IMOBILAR JavaScript - Interatividade e Animações
-
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
     initializeCounterAnimations();
@@ -12,7 +10,7 @@ function scrollToProperties() {
     const propertiesSection = document.getElementById('properties-section');
     if (propertiesSection) {
         const offsetTop = propertiesSection.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = offsetTop - 80; // Account for any fixed header
+        const offsetPosition = offsetTop - 80; 
 
         window.scrollTo({
             top: offsetPosition,
@@ -31,23 +29,17 @@ function initializeScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                // Add animation class when element comes into view
                 entry.target.classList.add('in-view');
-                
-                // Stop observing once animated
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Observe all elements that should animate on scroll
     const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-up');
     animatedElements.forEach((element) => {
         observer.observe(element);
     });
 }
-
-// Initialize counter animations
 function initializeCounterAnimations() {
     const counters = document.querySelectorAll('.stat-number');
     const observerOptions = {
@@ -77,7 +69,6 @@ function animateCounter(element, target) {
     const startValue = 0;
     const startTime = Date.now();
     
-    // Determine if target is a decimal (like 9.8)
     const isDecimal = target % 1 !== 0;
     const decimalPlaces = isDecimal ? 1 : 0;
     
@@ -85,7 +76,6 @@ function animateCounter(element, target) {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
-        // Easing function (ease out cubic)
         const easeOutCubic = 1 - Math.pow(1 - progress, 3);
         
         const currentValue = startValue + (target - startValue) * easeOutCubic;
