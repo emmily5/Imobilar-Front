@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anunciar Imóvel - IMOBILAR</title>
+    <meta name="description" content="Anuncie seu imóvel gratuitamente na IMOBILAR e alcance milhares de potenciais compradores e inquilinos.">
+    <meta name="author" content="IMOBILAR">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Additional styles for form -->
+    <style>
+        /* Progress Bar Styles */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            right: 2rem;
+            height: 2px;
+            background: hsl(214 32% 91%);
+            z-index: 1;
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+            z-index: 2;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .progress-circle {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--background);
+            border: 2px solid hsl(214 32% 91%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active .progress-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--text-white);
+        }
+        
+        .progress-step.completed .progress-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--text-white);
+        }
+        
+        .progress-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .progress-step.active .progress-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Form Step Styles */
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        /* Radio Button Styles */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .radio-option {
+            position: relative;
+        }
+        
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid hsl(214 32% 91%);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            background: var(--background);
+        }
+        
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--text-white);
+        }
+        
+        /* Checkbox Styles */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--primary);
+        }
+        
+        /* File Upload Styles */
+        .file-upload-area {
+            border: 2px dashed hsl(214 32% 91%);
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: var(--muted);
+        }
+        
+        .file-upload-area.dragover {
+            border-color: var(--primary);
+            background: var(--muted);
+        }
+        
+        .upload-icon {
+            width: 3rem;
+            height: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-subtext {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Image Preview Styles */
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px solid hsl(214 32% 91%);
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-remove {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--accent);
+            color: var(--text-white);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid hsl(214 32% 91%);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Error Styles */
+        .field-error {
+            border-color: var(--accent) !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: var(--background);
+            padding: 2rem 0;
+            border-bottom: 1px solid hsl(214 32% 91%);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-link {
+            text-decoration: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .progress-container {
+                margin-bottom: 2rem;
+            }
+            
+            .progress-step {
+                font-size: 0.75rem;
+            }
+            
+            .progress-circle {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 0.875rem;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-navigation {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+            
+            .nav-buttons {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo-link">
+                    <h1 class="footer-brand">IMOBILAR</h1>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Form Section -->
+    <section style="padding: 5rem 0;">
+        <div class="container">
+            <h1 class="section-title">Anuncie seu imóvel gratuitamente</h1>
+            <p style="text-align: center; max-width: 600px; margin: -3rem auto 4rem; color: var(--text-secondary);">
+                Preencha as etapas abaixo com as informações do seu imóvel para alcançar milhares de potenciais compradores e inquilinos.
+            </p>
+            
+            <!-- Form Container -->
+            <div class="search-card" style="max-width: 800px; margin: 0 auto;">
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-line" id="progressLine"></div>
+                    <div class="progress-step active" data-step="1">
+                        <div class="progress-circle">1</div>
+                        <div class="progress-label">Básico</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="progress-circle">2</div>
+                        <div class="progress-label">Detalhes</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="progress-circle">3</div>
+                        <div class="progress-label">Mídia</div>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="progress-circle">4</div>
+                        <div class="progress-label">Contato</div>
+                    </div>
+                </div>
+                
+                <!-- Form -->
+                <form id="propertyForm">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" data-step="1">
+                        <div class="search-field">
+                            <label class="search-label">Título do Anúncio *</label>
+                            <input type="text" name="title" class="search-input" placeholder="Ex: Apartamento Moderno com 3 quartos" required>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Tipo de Imóvel *</label>
+                            <select name="propertyType" class="search-select" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="casa">Casa</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="comercial">Comercial</option>
+                                <option value="terreno">Terreno</option>
+                            </select>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Operação *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="operation" value="venda" id="venda" required>
+                                    <label for="venda">Venda</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="operation" value="aluguel" id="aluguel" required>
+                                    <label for="aluguel">Aluguel</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Preço (R$) *</label>
+                            <input type="number" name="price" class="search-input" placeholder="Ex: 850000" required>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Descrição *</label>
+                            <textarea name="description" class="search-input" rows="5" placeholder="Descreva os diferenciais do imóvel..." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Details and Location -->
+                    <div class="form-step" data-step="2">
+                        <h3 style="margin-bottom: 2rem; color: var(--text-primary);">Endereço</h3>
+                        
+                        <div class="search-grid">
+                            <div class="search-field">
+                                <label class="search-label">CEP *</label>
+                                <input type="text" name="cep" class="search-input" placeholder="00000-000" required>
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Endereço *</label>
+                                <input type="text" name="address" class="search-input" placeholder="Rua, Avenida..." required>
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Número *</label>
+                                <input type="text" name="number" class="search-input" placeholder="123" required>
+                            </div>
+                        </div>
+                        
+                        <div class="search-grid">
+                            <div class="search-field">
+                                <label class="search-label">Bairro *</label>
+                                <input type="text" name="neighborhood" class="search-input" placeholder="Centro" required>
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Cidade *</label>
+                                <input type="text" name="city" class="search-input" placeholder="São Paulo" required>
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Estado *</label>
+                                <select name="state" class="search-select" required>
+                                    <option value="">Selecione</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                    <!-- Add more states as needed -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 3rem 0 2rem; color: var(--text-primary);">Características</h3>
+                        
+                        <div class="search-grid">
+                            <div class="search-field">
+                                <label class="search-label">Quartos</label>
+                                <input type="number" name="bedrooms" class="search-input" placeholder="3" min="0">
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Banheiros</label>
+                                <input type="number" name="bathrooms" class="search-input" placeholder="2" min="0">
+                            </div>
+                            <div class="search-field">
+                                <label class="search-label">Vagas de Garagem</label>
+                                <input type="number" name="parking" class="search-input" placeholder="1" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Área total (m²) *</label>
+                            <input type="number" name="area" class="search-input" placeholder="95" required min="1">
+                        </div>
+                        
+                        <h3 style="margin: 3rem 0 2rem; color: var(--text-primary);">Comodidades</h3>
+                        
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="piscina" id="piscina">
+                                <label for="piscina">Piscina</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="churrasqueira" id="churrasqueira">
+                                <label for="churrasqueira">Churrasqueira</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="mobiliado" id="mobiliado">
+                                <label for="mobiliado">Mobiliado</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="academia" id="academia">
+                                <label for="academia">Academia</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="portaria" id="portaria">
+                                <label for="portaria">Portaria 24h</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="amenities" value="pet" id="pet">
+                                <label for="pet">Aceita Pet</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Media -->
+                    <div class="form-step" data-step="3">
+                        <div class="search-field">
+                            <label class="search-label">Fotos do Imóvel</label>
+                            <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                                <input type="file" id="fileInput" name="photos" multiple accept="image/*" style="display: none;">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17,8 12,3 7,8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                <div class="upload-text">Clique para enviar fotos</div>
+                                <div class="upload-subtext">Ou arraste e solte até 10 fotos aqui</div>
+                            </div>
+                            <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                                A primeira imagem será a capa do seu anúncio. Formatos aceitos: JPG, PNG, WebP.
+                            </p>
+                            <div id="imagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Contact -->
+                    <div class="form-step" data-step="4">
+                        <div class="search-field">
+                            <label class="search-label">Seu Nome *</label>
+                            <input type="text" name="ownerName" class="search-input" placeholder="João Silva" required>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Seu E-mail *</label>
+                            <input type="email" name="ownerEmail" class="search-input" placeholder="joao@email.com" required>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label class="search-label">Seu Telefone/WhatsApp *</label>
+                            <input type="tel" name="ownerPhone" class="search-input" placeholder="(11) 99999-9999" required>
+                        </div>
+                        
+                        <div class="checkbox-item" style="margin-top: 2rem;">
+                            <input type="checkbox" name="terms" id="terms" required>
+                            <label for="terms">Li e concordo com os Termos de Uso e a Política de Privacidade.</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="form-navigation">
+                        <div>
+                            <button type="button" class="btn btn-outline" id="prevBtn" style="display: none;">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="19" y1="12" x2="5" y2="12"/>
+                                    <polyline points="12,19 5,12 12,5"/>
+                                </svg>
+                                Voltar
+                            </button>
+                        </div>
+                        <div class="nav-buttons">
+                            <button type="button" class="btn btn-primary" id="nextBtn">
+                                Avançar
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12,5 19,12 12,19"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div>
+                    <div class="footer-brand">IMOBILAR</div>
+                    <p class="footer-description">
+                        A plataforma completa para comprar, vender e alugar imóveis com segurança e transparência.
+                    </p>
+                    <p class="footer-tagline">
+                        Conectando você ao seu próximo lar.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="footer-heading">Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html" class="footer-link">Início</a></li>
+                        <li><a href="#properties-section" class="footer-link">Imóveis</a></li>
+                        <li><a href="anunciar.html" class="footer-link">Anunciar</a></li>
+                        <li><a href="#" class="footer-link">Sobre Nós</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Property Types -->
+                <div>
+                    <h4 class="footer-heading">Tipos de Imóvel</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Casas</a></li>
+                        <li><a href="#" class="footer-link">Apartamentos</a></li>
+                        <li><a href="#" class="footer-link">Comerciais</a></li>
+                        <li><a href="#" class="footer-link">Terrenos</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="footer-heading">Contato</h4>
+                    <ul class="footer-contacts">
+                        <li>contato@imobilar.com</li>
+                        <li>(11) 3000-0000</li>
+                        <li>Av. Paulista, 1000</li>
+                        <li>São Paulo - SP</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 IMOBILAR. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="anunciar.js"></script>
+</body>
+</html>
